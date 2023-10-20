@@ -5,6 +5,7 @@ Aaron Zumarraga - Ejercicio MVC basado en semestres anteriores
 Tutorial ingreso de datos con NodeJS - Express - Vue - MySQL
 
 Explicacion de la creacion de un proyecto con el patron de diseno MVC con las herramientas:
+
 	- MySQL (backend)
 	- Express y NodeJS (Middleware)
 	- VueJS (Frontend)
