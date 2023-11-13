@@ -26,15 +26,37 @@ connection.connect((err) => {
   console.log('Conexión a la base de datos exitosa');
 });
 
-app.post('/agregarPersona', (req, res) => {
-  const { nombre, apellido, edad } = req.body;
-  const query = 'INSERT INTO personas (nombre, apellido, edad) VALUES (?, ?, ?)';
-  connection.query(query, [nombre, apellido, edad], (error, results) => {
+// Endpoint para registrar un usuario
+app.post('/registrarUsuario', (req, res) => {
+  const { nombre, apellido, edad, username, password, rol } = req.body;
+  const query = 'INSERT INTO usuarios (nombre, apellido, edad, username, password, rol) VALUES (?, ?, ?, ?, ?, ?)';
+
+  connection.query(query, [nombre, apellido, edad, username, password, rol], (error, results) => {
     if (error) {
-      console.error('Error al insertar la persona:', error);
-      res.status(500).json({ message: 'Error al insertar la persona' });
+      console.error('Error al registrar el usuario:', error);
+      res.status(500).json({ message: 'Error al registrar el usuario' });
     } else {
-      res.status(201).json({ message: 'Persona insertada con éxito' });
+      res.status(201).json({ message: 'Usuario registrado con éxito' });
+    }
+  });
+});
+
+// Endpoint para iniciar sesión
+app.post('/iniciarSesion', (req, res) => {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM usuarios WHERE username = ? AND password = ?';
+
+  connection.query(query, [username, password], (error, results) => {
+    if (error) {
+      console.error('Error al iniciar sesión:', error);
+      res.status(500).json({ message: 'Error al iniciar sesión' });
+    } else {
+      if (results.length > 0) {
+        const usuario = results[0];
+        res.status(200).json({ message: 'Inicio de sesión exitoso', usuario });
+      } else {
+        res.status(401).json({ message: 'Credenciales inválidas' });
+      }
     }
   });
 });
